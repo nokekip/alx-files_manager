@@ -1,30 +1,31 @@
 import mongodb from 'mongodb';
+// eslint-disable-next-line no-unused-vars
 import Collection from 'mongodb/lib/collection';
-import evn_loader from './evn_loader';
+import envLoader from './env_loader';
 
 /**
- * MongoDB client
+ * Represents a MongoDB client.
  */
 class DBClient {
   /**
-     * Creates a new DBClient instance
-    */
+   * Creates a new DBClient instance.
+   */
   constructor() {
-    evn_loader();
+    envLoader();
     const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
-    const dbUrl = `mongodb://${host}:${port}/${database}`;
+    const dbURL = `mongodb://${host}:${port}/${database}`;
 
-    this.client = new mongodb.MongoClient(dbUrl, { userUnifiedTopology: true });
+    this.client = new mongodb.MongoClient(dbURL, { useUnifiedTopology: true });
     this.client.connect();
   }
 
   /**
-     * Get the connection to the database
-     * @returns {Promise} connection
-    */
-  async isAlive() {
+   * Checks if this client's connection to the MongoDB server is active.
+   * @returns {boolean}
+   */
+  isAlive() {
     return this.client.isConnected();
   }
 
